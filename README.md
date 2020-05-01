@@ -17,7 +17,7 @@ For a comparison between DBMate-Oracle and other popular database schema migrati
 ## Minimum Requirements
 
 * CGO enabled
-* Oracle Instant Client 11.2.0.4.0 and above
+* Oracle Instant Client 19.3
 
 
 ## Features

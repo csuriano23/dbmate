@@ -1,14 +1,24 @@
-# Dbmate
+# DBMate-Oracle
 
-[![Build Status](https://travis-ci.org/amacneil/dbmate.svg?branch=master)](https://travis-ci.org/amacneil/dbmate)
-[![Go Report Card](https://goreportcard.com/badge/github.com/amacneil/dbmate)](https://goreportcard.com/report/github.com/amacneil/dbmate)
-[![GitHub Release](https://img.shields.io/github/release/amacneil/dbmate.svg)](https://github.com/amacneil/dbmate/releases)
+[![Build Status](https://travis-ci.org/csuriano23/dbmate-oracle.svg?branch=master)](https://travis-ci.org/csuriano23/dbmate-oracle)
+[![Go Report Card](https://goreportcard.com/badge/github.com/csuriano23/dbmate-oracle)](https://goreportcard.com/report/github.com/csuriano23/dbmate-oracle)
+[![GitHub Release](https://img.shields.io/github/release/csuriano23/dbmate-oracle.svg)](https://github.com/csuriano23/dbmate-oracle/releases)
 
-Dbmate is a database migration tool, to keep your database schema in sync across multiple developers and your production servers.
+DBMate-Oracle is a fork of [DBMate](https://github.com/amacneil/dbmate) which integrates 
+Oracle 
+support. Due to the fact that Oracle call interface (OCI) is C-only, Golang oracle drivers, and DBMate-Oracle as a consequence, require the built executable to be linked against Oracle Instant Client, that 
+has to be installed on the client even if Oracle functionalities are not required. DBMate-Oracle is a database migration tool, to keep your database schema in sync across multiple developers and your production servers. It is a standalone command line tool, which can be 
+used with Go, 
+Node.js, Python, Ruby, PHP, or any other language or framework you are using to write database-backed applications. This is especially helpful if you are writing many services in different languages, and want to maintain some sanity with consistent development tools.
 
-It is a standalone command line tool, which can be used with Go, Node.js, Python, Ruby, PHP, or any other language or framework you are using to write database-backed applications. This is especially helpful if you are writing many services in different languages, and want to maintain some sanity with consistent development tools.
+For a comparison between DBMate-Oracle and other popular database schema migration tools, please see the [Alternatives](#alternatives) table.
 
-For a comparison between dbmate and other popular database schema migration tools, please see the [Alternatives](#alternatives) table.
+
+## Minimum Requirements
+
+* CGO enabled
+* Oracle Instant Client 11.2.0.4.0 and above
+
 
 ## Features
 
@@ -29,7 +39,7 @@ For a comparison between dbmate and other popular database schema migration tool
 Install using Homebrew:
 
 ```sh
-$ brew install dbmate
+$ brew install dbmate-oracle
 ```
 
 **Linux**
@@ -37,38 +47,38 @@ $ brew install dbmate
 Download the binary directly:
 
 ```sh
-$ sudo curl -fsSL -o /usr/local/bin/dbmate https://github.com/amacneil/dbmate/releases/download/v1.8.0/dbmate-linux-amd64
+$ sudo curl -fsSL -o /usr/local/bin/dbmate https://github.com/csuriano23/dbmate-oracle/releases/download/ora-v1.8.0-rc/dbmate-linux-amd64
 $ sudo chmod +x /usr/local/bin/dbmate
 ```
 
 **Docker**
 
-You can run dbmate using the official docker image:
+You can run DBMate-Oracle using the official docker image:
 
 ```sh
-$ docker run --rm -it amacneil/dbmate --help
+$ docker run --rm -it csuriano/dbmate-oracle --help
 ```
 
-If you wish to create or apply migrations, you will need to use Docker's [bind mount](https://docs.docker.com/storage/bind-mounts/) feature to make your local working directory available inside the dbmate container:
+If you wish to create or apply migrations, you will need to use Docker's [bind mount](https://docs.docker.com/storage/bind-mounts/) feature to make your local working directory available inside the DBMate-Oracle container:
 
 ```sh
-$ docker run --rm -it -v "$(pwd)"/db:/db amacneil/dbmate new create_users_table
+$ docker run --rm -it -v "$(pwd)"/db:/db csuriano/dbmate-oracle new create_users_table
 ```
 
 **Heroku**
 
-To use dbmate on Heroku, the easiest method is to store the linux binary in your git repository:
+To use DBMate-Oracle on Heroku, the easiest method is to store the linux binary in your git repository:
 
 ```sh
 $ mkdir -p bin
-$ curl -fsSL -o bin/dbmate-heroku https://github.com/amacneil/dbmate/releases/download/v1.8.0/dbmate-linux-amd64
+$ curl -fsSL -o bin/dbmate-heroku https://github.com/csuriano23/dbmate-oracle/releases/download/ora-v1.8.0-rc/dbmate-linux-amd64
 $ chmod +x bin/dbmate-heroku
 $ git add bin/dbmate-heroku
-$ git commit -m "Add dbmate binary"
+$ git commit -m "Add dbmate-oracle binary"
 $ git push heroku master
 ```
 
-You can then run dbmate on heroku:
+You can then run DBMate-Oracle on heroku:
 
 ```sh
 $ heroku run bin/dbmate-heroku up
@@ -76,10 +86,10 @@ $ heroku run bin/dbmate-heroku up
 
 **Other**
 
-Dbmate can be installed directly using `go get`:
+DBMate can be installed directly using `go get`:
 
 ```sh
-$ GO111MODULE=on go get -u github.com/amacneil/dbmate
+$ GO111MODULE=on go get -u github.com/csuriano23/dbmate-oracle
 ```
 
 ## Commands
@@ -100,9 +110,9 @@ dbmate wait      # wait for the database server to become available
 
 ## Usage
 
-Dbmate locates your database using the `DATABASE_URL` environment variable by default. If you are writing a [twelve-factor app](http://12factor.net/), you should be storing all connection strings in environment variables.
+DBMate-Oracle locates your database using the `DATABASE_URL` environment variable by default. If you are writing a [twelve-factor app](http://12factor.net/), you should be storing all connection strings in environment variables.
 
-To make this easy in development, dbmate looks for a `.env` file in the current directory, and treats any variables listed there as if they were specified in the current environment (existing environment variables take preference, however).
+To make this easy in development, DBMate-Oracle looks for a `.env` file in the current directory, and treats any variables listed there as if they were specified in the current environment (existing environment variables take preference, however).
 
 If you do not already have a `.env` file, create one and add your database connection URL:
 
@@ -135,7 +145,7 @@ DATABASE_URL="mysql://username:password@localhost/database_name?socket=/var/data
 
 **PostgreSQL**
 
-When connecting to Postgres, you may need to add the `sslmode=disable` option to your connection string, as dbmate by default requires a TLS connection (some other frameworks/languages allow unencrypted connections by default).
+When connecting to Postgres, you may need to add the `sslmode=disable` option to your connection string, as DBMate-Oracle by default requires a TLS connection (some other frameworks/languages allow unencrypted connections by default).
 
 ```sh
 DATABASE_URL="postgres://username:password@127.0.0.1:5432/database_name?sslmode=disable"
@@ -179,14 +189,12 @@ where
         * CONNECT
         * CREATE SESSION
 
-The following DBMate commands require an administrative connection:
+The following DBMate-Oracle commands require an administrative connection:
 * up
 * create
 * drop
 
-**_TODO_** Document instant client requirements for DBMate oracle client
-
-> __*Note*__: Since these tasks are usually managed by a DBA rather than the applicative user, DBMate supports them,
+> __*Note*__: Since these tasks are usually managed by a DBA rather than the applicative user, DBMate-Oracle supports them,
   but it is highly recommended to keep them out of versioning.  
   For this reason schema dump does not include schema creation commands (which have also to be 
   performed by a different user compared to applicative statements, eg. like SELECT and INSERT INTO).
@@ -195,7 +203,7 @@ Applicative mode supports, instead, canonical connection strings:
 ```sh
 DATABASE_URL="oracle://user:password@127.0.0.1:1521/service"
 ```
-and can be applied to all other DBMate commands.
+and can be applied to all other DBMate-Oracle commands.
 
 **SQLite**
 
@@ -251,7 +259,7 @@ Writing: ./db/schema.sql
 
 ### Rolling Back Migrations
 
-By default, dbmate doesn't know how to roll back a migration. In development, it's often useful to be able to revert your database to a previous state. To accomplish this, implement the `migrate:down` section:
+By default, DBMate-Oracle doesn't know how to roll back a migration. In development, it's often useful to be able to revert your database to a previous state. To accomplish this, implement the `migrate:down` section:
 
 ```sql
 -- migrate:up
@@ -292,11 +300,11 @@ ALTER TYPE colors ADD VALUE 'orange' AFTER 'red';
 
 ### Schema File
 
-When you run the `up`, `migrate`, or `rollback` commands, dbmate will automatically create a `./db/schema.sql` file containing a complete representation of your database schema. Dbmate keeps this file up to date for you, so you should not manually edit it.
+When you run the `up`, `migrate`, or `rollback` commands, DBMate-Oracle will automatically create a `./db/schema.sql` file containing a complete representation of your database schema. DBMate-Oracle keeps this file up to date for you, so you should not manually edit it.
 
 It is recommended to check this file into source control, so that you can easily review changes to the schema in commits or pull requests. It's also possible to use this file when you want to quickly load a database schema, without running each migration sequentially (for example in your test harness). However, if you do not wish to save this file, you could add it to `.gitignore`, or pass the `--no-dump-schema` command line option.
 
-To dump the `schema.sql` file without performing any other actions, run `dbmate dump`. Unlike other dbmate actions, this command relies on the respective `pg_dump`, `mysqldump`, or `sqlite3` commands being available in your PATH. If these tools are not available, dbmate will silenty skip the schema dump step during `up`, `migrate`, or `rollback` actions. You can diagnose the issue by running `dbmate dump` and looking at the output:
+To dump the `schema.sql` file without performing any other actions, run `dbmate dump`. Unlike other DBMate-Oracle actions, this command relies on the respective `pg_dump`, `mysqldump`, or `sqlite3` commands being available in your PATH. If these tools are not available, DBMate-Oracle will silenty skip the schema dump step during `up`, `migrate`, or `rollback` actions. You can diagnose the issue by running `dbmate dump` and looking at the output:
 
 ```sh
 $ dbmate dump
@@ -305,13 +313,13 @@ exec: "pg_dump": executable file not found in $PATH
 
 On Ubuntu or Debian systems, you can fix this by installing `postgresql-client`, `mysql-client`, or `sqlite3` respectively. Ensure that the package version you install is greater than or equal to the version running on your database server.
 
-> Note: The `schema.sql` file will contain a complete schema for your database, even if some tables or columns were created outside of dbmate migrations.
+> Note: The `schema.sql` file will contain a complete schema for your database, even if some tables or columns were created outside of DBMate-Oracle migrations.
 
 ### Waiting For The Database
 
 If you use a Docker development environment for your project, you may encounter issues with the database not being immediately ready when running migrations or unit tests. This can be due to the database server having only just started.
 
-In general, your application should be resilient to not having a working database connection on startup. However, for the purpose of running migrations or unit tests, this is not practical. The `wait` command avoids this situation by allowing you to pause a script or other application until the database is available. Dbmate will attempt a connection to the database server every second, up to a maximum of 60 seconds.
+In general, your application should be resilient to not having a working database connection on startup. However, for the purpose of running migrations or unit tests, this is not practical. The `wait` command avoids this situation by allowing you to pause a script or other application until the database is available. DBMate-Oracle will attempt a connection to the database server every second, up to a maximum of 60 seconds.
 
 If the database is available, `wait` will return no output:
 
@@ -360,7 +368,7 @@ The following command line options are available with all commands. You must use
 * `--schema-file, -s "./db/schema.sql"` - a path to keep the schema.sql file.
 * `--no-dump-schema` - don't auto-update the schema.sql file on migrate/rollback
 * `--wait` - wait for the db to become available before executing the subsequent command
-* `--dbmate-engine` - switch scripts execution to DBMate engine (experimental). Default is database native engine. 
+* `--dbmate-engine` - switch scripts execution to DBMate-Oracle engine (experimental). Default is database native engine. 
 On Oracle databases this option is always on, since there is no native scripting engine 
 
 For example, before running your test suite, you may wish to drop and recreate the test database. One easy way to do this is to store your test database connection URL in the `TEST_DATABASE_URL` environment variable:
@@ -382,39 +390,38 @@ Applying: 20151127184807_create_users_table.sql
 
 ## FAQ
 
-**How do I use dbmate under Alpine linux?**
+**How do I use DBMate-Oracle under Alpine linux?**
 
-Alpine linux uses [musl libc](https://www.musl-libc.org/), which is incompatible with how we build Oracle and SQLite support (using [cgo](https://golang.org/cmd/cgo/)). If you want Alpine linux support, and don't mind sacrificing SQLite support, please use the `dbmate-linux-musl-amd64` build found on the [releases page](https://github.com/amacneil/dbmate/releases).
+Alpine linux uses [musl libc](https://www.musl-libc.org/), which is incompatible with how we build Oracle and SQLite support (using [cgo](https://golang.org/cmd/cgo/)). If you want Alpine linux support, and don't mind sacrificing SQLite support, please use the `dbmate-linux-musl-amd64` build found on the [releases page](https://github.com/csuriano23/dbmate-oracle/releases).
 
 ## Alternatives
 
-Why another database schema migration tool? Dbmate was inspired by many other tools, primarily [Active Record Migrations](http://guides.rubyonrails.org/active_record_migrations.html), with the goals of being trivial to configure, and language & framework independent. Here is a comparison between dbmate and other popular migration tools.
-
-| | [goose](https://bitbucket.org/liamstask/goose/) | [sql-migrate](https://github.com/rubenv/sql-migrate) | [golang-migrate/migrate](https://github.com/golang-migrate/migrate) | [activerecord](http://guides.rubyonrails.org/active_record_migrations.html) | [sequelize](http://docs.sequelizejs.com/manual/tutorial/migrations.html) | [dbmate](https://github.com/amacneil/dbmate) |
-| --- |:---:|:---:|:---:|:---:|:---:|:---:|
-| **Features** |||||||
-|Plain SQL migration files|:white_check_mark:|:white_check_mark:|:white_check_mark:|||:white_check_mark:|
-|Support for creating and dropping databases||||:white_check_mark:||:white_check_mark:|
-|Support for saving schema dump files||||:white_check_mark:||:white_check_mark:|
-|Timestamp-versioned migration files|:white_check_mark:|||:white_check_mark:|:white_check_mark:|:white_check_mark:|
-|Ability to wait for database to become ready||||||:white_check_mark:|
-|Database connection string loaded from environment variables||||||:white_check_mark:|
-|Automatically load .env file||||||:white_check_mark:|
-|No separate configuration file||||:white_check_mark:|:white_check_mark:|:white_check_mark:|
-|Language/framework independent|:eight_pointed_black_star:|:eight_pointed_black_star:|:eight_pointed_black_star:|||:white_check_mark:|
-| **Drivers** |||||||
-|PostgreSQL|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|
-|MySQL|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|
-|Oracle| |:white_check_mark:| |:white_check_mark:| |:white_check_mark:|
-|SQLite|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+Why another database schema migration tool? DBMate-Oracle was forked by DBMate and inspired by many other tools, primarily [Active Record Migrations](http://guides.rubyonrails.org/active_record_migrations.html), with the goals of being trivial to configure, and language & framework independent. Here is a comparison between DBMate-Oracle and other popular migration tools.
+| | [goose](https://bitbucket.org/liamstask/goose/) | [sql-migrate](https://github.com/rubenv/sql-migrate) | [golang-migrate/migrate](https://github.com/golang-migrate/migrate) | [activerecord](http://guides.rubyonrails.org/active_record_migrations.html) | [sequelize](http://docs.sequelizejs.com/manual/tutorial/migrations.html) | [DBMate](https://github.com/amacneil/dbmate) | [DBMate-Oracle](https://github.com/csuriano23/dbmate-oracle) |
+| --- |:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Features** ||||||||
+|Plain SQL migration files|:white_check_mark:|:white_check_mark:|:white_check_mark:|||:white_check_mark:|:white_check_mark:|
+|Support for creating and dropping databases||||:white_check_mark:||:white_check_mark:|:white_check_mark:|
+|Support for saving schema dump files||||:white_check_mark:||:white_check_mark:|:white_check_mark:|
+|Timestamp-versioned migration files|:white_check_mark:|||:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+|Ability to wait for database to become ready||||||:white_check_mark:|:white_check_mark:|
+|Database connection string loaded from environment variables||||||:white_check_mark:|:white_check_mark:|
+|Automatically load .env file||||||:white_check_mark:|:white_check_mark:|
+|No separate configuration file||||:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+|Language/framework independent|:eight_pointed_black_star:|:eight_pointed_black_star:|:eight_pointed_black_star:|||:white_check_mark:|:white_check_mark:|
+| **Drivers** ||||||||
+|PostgreSQL|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+|MySQL|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+|Oracle| |:white_check_mark:| |:white_check_mark:| | |:white_check_mark:|
+|SQLite|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|:white_check_mark:|
 
 > :eight_pointed_black_star: In theory these tools could be used with other languages, but a Go development environment is required because binary builds are not provided.
 
-*If you notice any inaccuracies in this table, please [propose a change](https://github.com/amacneil/dbmate/edit/master/README.md).*
+*If you notice any inaccuracies in this table, please [propose a change](https://github.com/csuriano23/dbmate-oracle/edit/master/README.md).*
 
 ## Contributing
 
-Dbmate is written in Go, pull requests are welcome.
+DBMate-Oracle is written in Go, pull requests are welcome.
 
 Tests are run against a real database using docker-compose. To build a docker image and run the tests:
 

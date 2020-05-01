@@ -1,4 +1,4 @@
-module github.com/amacneil/dbmate
+module github.com/csuriano23/dbmate-oracle
 
 go 1.13
 

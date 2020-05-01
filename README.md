@@ -199,6 +199,8 @@ The following DBMate-Oracle commands require an administrative connection:
   For this reason schema dump does not include schema creation commands (which have also to be 
   performed by a different user compared to applicative statements, eg. like SELECT and INSERT INTO).
 
+> __*Warning*__: Dump Schema function has yet to be implemented
+
 Applicative mode supports, instead, canonical connection strings:
 ```sh
 DATABASE_URL="oracle://user:password@127.0.0.1:1521/service"

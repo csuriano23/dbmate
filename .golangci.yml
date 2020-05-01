@@ -21,6 +21,6 @@ linters:
 
 linters-settings:
   goimports:
-    local-prefixes: github.com/amacneil/dbmate
+    local-prefixes: github.com/csuriano23/dbmate-oracle
   misspell:
     locale: US

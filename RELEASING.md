@@ -5,8 +5,3 @@ The following steps should be followed to publish a new version of dbmate (requi
 1. Update [version.go](/pkg/dbmate/version.go) and [README.md](/README.md) with new version number ([example PR](https://github.com/csuriano23/dbmate-oracle/pull/4/files))
 2. Create new release on GitHub project [releases page](https://github.com/csuriano23/dbmate-oracle/releases)
 3. Travis CI will automatically publish release binaries to GitHub
-4. Create PR to update Homebrew package by running the following command:
-
-```
-$ brew bump-formula-pr --url=https://github.com/csuriano23/dbmate-oracle/archive/ora-vX.Y.Z.tar.gz dbmate-oracle
-```

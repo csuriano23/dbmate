@@ -184,6 +184,8 @@ The following DBMate commands require an administrative connection:
 * create
 * drop
 
+**_TODO_** Document instant client requirements for DBMate oracle client
+
 > __*Note*__: Since these tasks are usually managed by a DBA rather than the applicative user, DBMate supports them,
   but it is highly recommended to keep them out of versioning.  
   For this reason schema dump does not include schema creation commands (which have also to be 

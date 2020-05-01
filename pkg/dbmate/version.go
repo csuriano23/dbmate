@@ -1,4 +1,4 @@
 package dbmate
 
 // Version of dbmate
-const Version = "2.0.0-alpha"
+const Version = "ora-v1.8.0-rc"

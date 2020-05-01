@@ -392,7 +392,8 @@ Applying: 20151127184807_create_users_table.sql
 
 **How do I use DBMate-Oracle under Alpine linux?**
 
-Alpine linux uses [musl libc](https://www.musl-libc.org/), which is incompatible with how we build Oracle and SQLite support (using [cgo](https://golang.org/cmd/cgo/)). If you want Alpine linux support, and don't mind sacrificing SQLite support, please use the `dbmate-linux-musl-amd64` build found on the [releases page](https://github.com/csuriano23/dbmate-oracle/releases).
+Alpine linux uses [musl libc](https://www.musl-libc.org/), which is incompatible with how we build Oracle support.
+Some workarounds [can be found](https://megamorf.gitlab.io/2019/09/08/alpine-go-builds-with-cgo-enabled.html) to run Alpine Linux with CGO enabled.
 
 ## Alternatives
 
